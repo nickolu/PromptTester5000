@@ -14,9 +14,12 @@ export interface TestResult {
 export default abstract class TestResultsWriter {
   columns: string[];
   variants: TestVariant[];
-  constructor(columns: string[], variants: TestVariant[]) {
+  outputFileName: string;
+
+  constructor(columns: string[], variants: TestVariant[], outputFileName: string) {
     this.columns = columns;
     this.variants = variants;
+    this.outputFileName = outputFileName;
   }
   abstract beforeAll(
     times: number,
@@ -35,9 +38,12 @@ export class CsvTestResultsWriter extends TestResultsWriter {
   fileWriter: FastCsvFileWriter;
   outputColumns: string[];
 
-  constructor(columns: string[], variants: TestVariant[]) {
-    super(columns, variants);
-    this.fileWriter = new FastCsvFileWriter("output.csv");
+  constructor(columns: string[], variants: TestVariant[], outputFileName: string) {
+    super(columns, variants, outputFileName);
+
+    this.fileWriter = new FastCsvFileWriter(
+      this.outputFileName
+    );
     this.outputColumns = ["variant", ...columns, "results", "score"];
   }
 
@@ -47,7 +53,7 @@ export class CsvTestResultsWriter extends TestResultsWriter {
         this.variants.length
       } variants >`
     );
-    
+
     await this.fileWriter.initFile(this.outputColumns);
   }
 
@@ -60,23 +66,21 @@ export class CsvTestResultsWriter extends TestResultsWriter {
   }
 
   async afterEach(result: TestResult, variant: TestVariant, i: number) {
-    const csv = new FastCsvFileWriter("output.csv");
+    const csv = new FastCsvFileWriter(this.outputFileName);
     const row = this.buildCsvRow(variant, result.response.text, i);
     await csv.addRow(row);
   }
-
-  
 
   private buildCsvRow(
     variant: TestVariant,
     results: string,
     i: number
   ): DataRow {
-    const csvRow= {
+    const csvRow = {
       variant: i.toString(),
       ...variant.originalDataRow,
       results: results,
-      score: ""
+      score: "",
     };
 
     if (!this.doesRowComplyWithColumns(csvRow)) {
@@ -99,7 +103,7 @@ export class CsvTestResultsWriter extends TestResultsWriter {
 export class ConsoleTestResultsWriter extends TestResultsWriter {
   async beforeAll(times: number, i: number) {
     console.log(
-      `  < initiating test run ${i + 1} out of ${times} for ${
+      `  < initiating ${times} test runs for ${
         this.variants.length
       } variants >`
     );

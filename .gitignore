@@ -1,2 +1,6 @@
 .env
 node_modules
+test-output
+!test-output/index.ts
+test-input.csv
+package-lock.json

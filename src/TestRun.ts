@@ -8,19 +8,29 @@ export default class TestRun {
   columns: string[];
   results: TestResult[] = [];
   testResultsWriter: TestResultsWriter;
+  options: {
+    inputFileName: string;
+    outputFileName: string;
+  }
 
   constructor({
     variants,
     columns,
     TestResultsWriter,
+    options,
   }: {
     variants: TestVariant[];
     columns: string[];
     TestResultsWriter: any;
+    options: {
+      inputFileName: string;
+      outputFileName: string;
+    }
   }) {
     this.variants = variants;
     this.columns = columns;
-    this.testResultsWriter = new TestResultsWriter(columns, variants);
+    this.options = options;
+    this.testResultsWriter = new TestResultsWriter(columns, variants, options.outputFileName);
   }
 
   async run(times: number) {
@@ -30,6 +40,7 @@ export default class TestRun {
 
     while (timesRemaining > 0) {
       let currentTestIteration = 1;
+      console.log(`< initiating test run ${times - timesRemaining + 1} out of ${times} >`)
       for (const variant of this.variants) {
         const { temperature, model, messages } = variant;
         await this.testResultsWriter.beforeEach(variant, currentTestIteration);

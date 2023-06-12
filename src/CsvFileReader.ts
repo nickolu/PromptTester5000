@@ -33,7 +33,7 @@ abstract class CsvFileReader {
           rowNumber++;
         })
         .on("end", () => {
-          console.log("CSV file successfully processed");
+          console.log("Finished reading CSV file");
           resolve(data);
         })
         .on("error", (err) => {
@@ -44,7 +44,10 @@ abstract class CsvFileReader {
   }
   public async getHeaders(): Promise<string[]> {
     const headers = await this.getRows(0, 0);
-    return Object.keys(headers[0]);
+    if (headers?.length > 0) {
+      return Object.keys(headers[0]);
+    }
+    return [];
   }
   public async getRow(rowNumber: number): Promise<DataRow> {
     const rows = await this.getRows(rowNumber, rowNumber);
