@@ -16,7 +16,7 @@
 ## To run your experiments
 
 1. Add your test details to your input file (`test-input.csv` is the default but you can specify this when you run your experiments). See `test-input-sample.csv`
-    - In this file you can specify as many system messages, human messages, and ai messages as you like depending on your prompt engineering strategy (you can few show using ai messages, for example). 
+    - In this file you can specify as many system messages, human messages, and ai messages as you like depending on your prompt engineering strategy (you can few shot using ai messages, for example). 
         - Each of those columns must be named uniquely, duplicate column names will be skipped and could mess up your output
         - Each of those column names must begin with the string `system_message`, `human_message`, or `ai_message`, respectively. 
         - You must also specify a temperature and modelname for each row in the input
