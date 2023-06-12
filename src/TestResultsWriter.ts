@@ -49,7 +49,7 @@ export class CsvTestResultsWriter extends TestResultsWriter {
 
   async beforeAll(times: number, i: number) {
     console.log(
-      `< initiating test run ${i + 1} out of ${times} for ${
+      `< initiating ${times} test runs for ${
         this.variants.length
       } variants >`
     );
@@ -62,7 +62,7 @@ export class CsvTestResultsWriter extends TestResultsWriter {
   }
 
   async afterAll(results: TestResult[]) {
-    console.log(`< test run complete for ${results.length} tests >`);
+    console.log(`< test run complete after ${results.length} total executions >`);
   }
 
   async afterEach(result: TestResult, variant: TestVariant, i: number) {
