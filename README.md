@@ -11,7 +11,7 @@
 3. Install dependencies in the project
     - `npm install` or `yarn install` (preferred)
     - you can use npm if you don't want to install yarn globally, but the dependencies are managed with yarn so if you run into issues you may need to use yarn. In most cases all you need is `npm i -g yarn`
-
+4. Add a .env file with your OPENAI_API_KEY (see .env.sample)
 
 ## To run your experiments
 
